@@ -8,17 +8,24 @@ const r = new snoowrap({
   refreshToken: process.env.CLIENT_REFRESH_TOKEN
 });
 
-const app = express();
+var entries = [];
 
-function log(g) {
-    console.log(g);
+function addEntries(newEntries) {
+    console.log(newEntries.length);
+    entries = newEntries;
 }
 
-r.getSubreddit('youtubehaiku').getTop({ time: 'week' }).then(log);
+r.getSubreddit('youtubehaiku')
+    .getTop({ time: 'week', limit: 50 })
+    .map(post => post.url)
+    .then(addEntries);
 
-/*    
-    
-    .map(post => post.title)
-    .then(console.log);
-  */  
-return;
+const app = express();
+
+app.get('/youtubehaiku/top', function (req, res) {
+    res.send(entries);
+});
+
+app.listen(8080, function () {
+    console.log('started');
+});
