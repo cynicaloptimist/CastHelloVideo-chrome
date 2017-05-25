@@ -1,0 +1,23 @@
+{
+  "name": "reddit-slurp",
+  "version": "1.0.0",
+  "description": "Cast and queue multiple videos from any subreddit",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cynicaloptimist/subreddit-cast.git"
+  },
+  "author": "Evan Bailey",
+  "license": "Apache",
+  "bugs": {
+    "url": "https://github.com/cynicaloptimist/subreddit-cast/issues"
+  },
+  "homepage": "https://github.com/cynicaloptimist/subreddit-cast#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "snoowrap": "^1.14.0"
+  }
+}
