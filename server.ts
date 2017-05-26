@@ -1,5 +1,6 @@
-const express = require('express');
-const snoowrap = require('snoowrap');
+import * as _ from "lodash";
+import * as express from "express";
+import * as snoowrap from "snoowrap";
 
 const r = new snoowrap({
   userAgent: 'node:subreddit-cast-helper:0.1 (by /u/cynicaloctopus)',
@@ -10,9 +11,9 @@ const r = new snoowrap({
 
 const entries = [];
 
-function addEntries(newEntries) {
+function addEntries(newEntries: any []) {
     console.log(newEntries.length);
-    entries.push(newEntries);
+    newEntries.forEach(e => entries.push(e));
 }
 
 r.getSubreddit('youtubehaiku')
