@@ -22,6 +22,8 @@ r.getSubreddit('youtubehaiku')
 
 const app = express();
 
+app.use(express.static('public'));
+
 app.get('/youtubehaiku/top', function (req, res) {
     res.send(entries);
 });
