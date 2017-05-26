@@ -12,7 +12,7 @@ const entries = [];
 
 function addEntries(newEntries) {
     console.log(newEntries.length);
-    entries = newEntries;
+    entries.push(newEntries);
 }
 
 r.getSubreddit('youtubehaiku')
