@@ -1,3 +1,14 @@
 import * as _ from "lodash";
+import * as $ from "jquery";
 
-console.log(`5 + 5 = ${_.add(5, 5)}`);
+const castUrls = (urls: string[]) => {
+    
+};
+
+$.getJSON('/youtubehaiku/top', (urls: string[]) => {
+    $('.play')
+        .prop("disabled", false)
+        .click(() => {
+            castUrls(urls);
+        });
+}, err => console.error(err));
