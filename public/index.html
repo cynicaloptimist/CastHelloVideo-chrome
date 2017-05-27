@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<script src="bundle.js"></script>
+  <style type="text/css">
+  button {
+    display: block;
+    height: 30px;
+    width: 150px;
+  }
+  </style>
 </head>
+
 <body>
   <div>
-    <input class="play" type="button" value="Play" disabled="disabled" />
+    <button is="google-cast-button"></button>
+    <button class="play">Send</button>
   </div>
+
+  <script src="bundle.js"></script>
+  <script type="text/javascript">
+    window['__onGCastApiAvailable'] = function (isAvailable) {
+      if (isAvailable) {
+        initializeCastApi();
+      }
+    };
+
+  </script>
+  <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 </body>
+
 </html>
