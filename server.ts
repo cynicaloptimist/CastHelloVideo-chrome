@@ -1,8 +1,7 @@
-import * as _ from "lodash";
 import * as express from "express";
 import * as snoowrap from "snoowrap";
 
-const r = new snoowrap({
+const r: snoowrap = new snoowrap({
   userAgent: 'node:subreddit-cast-helper:0.1 (by /u/cynicaloctopus)',
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
@@ -10,16 +9,13 @@ const r = new snoowrap({
 });
 
 const entries = [];
+async function loadEntries() {
+    await r.getSubreddit('youtubehaiku').getTop({time: "week"}).forEach(s => entries.push(s.url));
 
-function addEntries(newEntries: any []) {
-    console.log(newEntries.length);
-    newEntries.forEach(e => entries.push(e));
+    console.table(entries);
 }
 
-r.getSubreddit('youtubehaiku')
-    .getTop({ time: 'week', limit: 50 })
-    .map(post => post.url)
-    .then(addEntries);
+loadEntries();
 
 const app = express();
 
