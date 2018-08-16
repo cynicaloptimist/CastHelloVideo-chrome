@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as snoowrap from "snoowrap";
+import * as querystring from "querystring";
 
 const r: snoowrap = new snoowrap({
   userAgent: 'node:subreddit-cast-helper:0.1 (by /u/cynicaloctopus)',
@@ -20,6 +21,8 @@ export async function getHaikuVideoIds() {
     }).filter(id => id !== undefined);
 }
 
+let entries = [];
+
 const app = express();
 
 app.use(express.static('public'));
@@ -28,6 +31,7 @@ app.get('/youtubehaiku/top', async function (req, res) {
     res.send(await entries);
 });
 
-app.listen(8080, function () {
+app.listen(8080, async () => {
+    entries = await getHaikuUrls();
     console.log('started');
 });
