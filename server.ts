@@ -4,15 +4,6 @@ import * as querystring from "querystring";
 import * as fs from "fs";
 import { sendHaikusToYoutubePlaylist } from "./nodejs-quickstart";
 
-fs.readFile('client_secret.json', function processClientSecrets(err, content) {
-    if (err) {
-      console.log('Error loading client secret file: ' + err);
-      return;
-    }
-    // Authorize a client with the loaded credentials, then call the YouTube API.
-    JSON.parse(content.toString());
-});
-  
 let r: snoowrap = new snoowrap({
   userAgent: 'node:subreddit-cast-helper:0.1 (by /u/cynicaloctopus)',
   clientId: process.env.CLIENT_ID,
@@ -49,8 +40,6 @@ app.get('/youtubehaiku/top', async function (req, res) {
 });
 
 app.listen(8080, async () => {
-    //entries = await getHaikuUrls();
-    const ids = await getHaikuVideoIds();
-    await sendHaikusToYoutubePlaylist(ids);
+    entries = await getHaikuVideoIds();
     console.log('started');
 });
