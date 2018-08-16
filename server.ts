@@ -8,11 +8,17 @@ const r: snoowrap = new snoowrap({
   refreshToken: process.env.CLIENT_REFRESH_TOKEN
 });
 
-export async function getHaikuUrls() {
+async function getHaikuUrls() {
     return await r.getSubreddit('youtubehaiku').getTop({time: "week"}).map(submission => submission.url);
 }
 
-const entries = getHaikuUrls();
+export async function getHaikuVideoIds() {
+    const urls = await getHaikuUrls();
+    return urls.map(url => {
+        const params = querystring.parse(url);
+        return params.v;
+    }).filter(id => id !== undefined);
+}
 
 const app = express();
 
