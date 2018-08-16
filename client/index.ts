@@ -12,8 +12,8 @@ var OAUTH2_SCOPES = [
 ];
 
 // Upon loading, the Google APIs JS client automatically invokes this callback.
-window["googleApiClientReady"] = function() {
-  gapi.auth.init(function() {
+window["googleApiClientReady"] = function () {
+  gapi.auth.init(function () {
     window.setTimeout(checkAuth, 1);
   });
 }
@@ -42,12 +42,12 @@ function handleAuthResult(authResult) {
   } else {
     // Make the #login-link clickable. Attempt a non-immediate OAuth 2.0
     // client flow. The current function is called when that flow completes.
-    $('#login-link').click(function() {
+    $('#login-link').click(function () {
       gapi.auth.authorize({
         client_id: OAUTH2_CLIENT_ID,
         scope: OAUTH2_SCOPES,
         immediate: false
-        }, handleAuthResult);
+      }, handleAuthResult);
     });
   }
 }
@@ -56,29 +56,31 @@ function handleAuthResult(authResult) {
 // are required to use the Google APIs JS client. More info is available at
 // https://developers.google.com/api-client-library/javascript/dev/dev_jscript#loading-the-client-library-and-the-api
 function loadAPIClientInterfaces() {
-  gapi.client.load('youtube', 'v3', function() {
+  gapi.client.load('youtube', 'v3', function () {
     handleAPILoaded();
   });
 }
 
-function handleAPILoaded() { }
+function handleAPILoaded() {
+  $("#playlist-button").prop("disabled", false);
+}
 
 $.getJSON('/youtubehaiku/top', (ids: string[]) => {
-    $('.play')
-        .prop("disabled", false)
-        .click(() => {
-            const request = gapi.client.youtube.playlists.insert({
-                part: 'snippet,status',
-                resource: {
-                  snippet: {
-                    title: 'Test Playlist',
-                    description: 'A private playlist created with the YouTube API'
-                  },
-                  status: {
-                    privacyStatus: 'private'
-                  }
-                }
-              });
-            
-        });
+  $('.play')
+    .prop("disabled", false)
+    .click(() => {
+      const request = gapi.client.youtube.playlists.insert({
+        part: 'snippet,status',
+        resource: {
+          snippet: {
+            title: 'Test Playlist',
+            description: 'A private playlist created with the YouTube API'
+          },
+          status: {
+            privacyStatus: 'private'
+          }
+        }
+      });
+
+    });
 }, err => console.error(err));
