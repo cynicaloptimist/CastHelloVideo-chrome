@@ -11,14 +11,35 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
 var TOKEN_PATH = TOKEN_DIR + 'youtube-nodejs-quickstart.json';
 
 // Load client secrets from a local file.
-fs.readFile('client_secret.json', function processClientSecrets(err, content) {
-  if (err) {
-    console.log('Error loading client secret file: ' + err);
-    return;
-  }
-  // Authorize a client with the loaded credentials, then call the YouTube API.
-  authorize(JSON.parse(content), getChannel);
-});
+export async function sendHaikusToYoutubePlaylist(ids: string[]) {
+  fs.readFile('client_secret.json', function processClientSecrets(err, content) {
+    if (err) {
+      console.log('Error loading client secret file: ' + err);
+      return;
+    }
+    // Authorize a client with the loaded credentials, then call the YouTube API.
+    authorize(JSON.parse(content), async (auth) => {
+      const service = google.youtube('v3');
+
+      console.log(ids[0]);
+
+      const result = await service.playlists.insert({
+        part: 'snippet,status',
+        resource: {
+          snippet: {
+            title: 'Test Playlist',
+            description: 'A private playlist created with the YouTube API'
+          },
+          status: {
+            privacyStatus: 'private'
+          }
+        }
+      });
+
+      console.log(result);
+    });
+  });
+}
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -92,34 +113,5 @@ function storeToken(token) {
   fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
     if (err) throw err;
     console.log('Token stored to ' + TOKEN_PATH);
-  });
-}
-
-/**
- * Lists the names and IDs of up to 10 files.
- *
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-function getChannel(auth) {
-  var service = google.youtube('v3');
-  service.channels.list({
-    auth: auth,
-    part: 'snippet,contentDetails,statistics',
-    forUsername: 'GoogleDevelopers'
-  }, function (err, response) {
-    if (err) {
-      console.log('The API returned an error: ' + err);
-      return;
-    }
-    var channels = response.data.items;
-    if (channels.length == 0) {
-      console.log('No channel found.');
-    } else {
-      console.log('This channel\'s ID is %s. Its title is \'%s\', and ' +
-        'it has %s views.',
-        channels[0].id,
-        channels[0].snippet.title,
-        channels[0].statistics.viewCount);
-    }
   });
 }
