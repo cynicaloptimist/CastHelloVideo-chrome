@@ -8,14 +8,11 @@ const r: snoowrap = new snoowrap({
   refreshToken: process.env.CLIENT_REFRESH_TOKEN
 });
 
-const entries = [];
-async function loadEntries() {
-    await r.getSubreddit('youtubehaiku').getTop({time: "week"}).forEach(s => entries.push(s.url));
-
-    console.table(entries);
+export async function getHaikuUrls() {
+    return await r.getSubreddit('youtubehaiku').getTop({time: "week"}).map(submission => submission.url);
 }
 
-loadEntries();
+const entries = getHaikuUrls();
 
 const app = express();
 
