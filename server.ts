@@ -18,8 +18,8 @@ const app = express();
 
 app.use(express.static('public'));
 
-app.get('/youtubehaiku/top', function (req, res) {
-    res.send(entries);
+app.get('/youtubehaiku/top', async function (req, res) {
+    res.send(await entries);
 });
 
 app.listen(8080, function () {
