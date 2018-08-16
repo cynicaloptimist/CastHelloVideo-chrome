@@ -1,17 +1,24 @@
 import * as _ from "lodash";
 import * as $ from "jquery";
-import { getSession, enqueueUrl } from "./cast-api";
 
-const castUrls = (urls: string[]) => {
-    console.log(urls[0]);
-    const session = getSession();
-    enqueueUrl(session, urls[0]);
-};
+declare var gapi;
 
-$.getJSON('/youtubehaiku/top', (urls: string[]) => {
+$.getJSON('/youtubehaiku/top', (ids: string[]) => {
     $('.play')
         .prop("disabled", false)
         .click(() => {
-            castUrls(urls);
+            const request = gapi.client.youtube.playlists.insert({
+                part: 'snippet,status',
+                resource: {
+                  snippet: {
+                    title: 'Test Playlist',
+                    description: 'A private playlist created with the YouTube API'
+                  },
+                  status: {
+                    privacyStatus: 'private'
+                  }
+                }
+              });
+            
         });
 }, err => console.error(err));
