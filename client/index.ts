@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as $ from "jquery";
+import { resolve } from "url";
 
 declare var gapi;
 // The client ID is obtained from the {{ Google Cloud Console }}
@@ -91,7 +92,7 @@ function createPlaylist(callback: (playlistId: string) => void) {
 // Add a video to a playlist. The "startPos" and "endPos" values let you
 // start and stop the video at specific times when the video is played as
 // part of the playlist. However, these values are not set in this example.
-function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
+async function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
   var details = {
     videoId,
     kind: 'youtube#video'
@@ -111,8 +112,16 @@ function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
       }
     }
   });
-  request.execute(function (response) {
-    $('#status').html('<pre>' + JSON.stringify(response.result) + '</pre>');
+
+  return new Promise((resolve, reject) => {
+    request.execute(function (response) {
+      var result = response.result;
+      if (result) {
+        resolve(result);
+      } else {
+        reject(response);
+      }
+    });
   });
 }
 
@@ -121,8 +130,10 @@ $.getJSON('/youtubehaiku/top', (ids: string[]) => {
   $('.play')
     .prop("disabled", false)
     .click(() => {
-      createPlaylist(playlistId => {
-        ids.forEach(id => addToPlaylist(playlistId, id));
+      createPlaylist(async playlistId => {
+        for (const id of ids) {
+          await addToPlaylist(playlistId, id);
+        }
       });
     });
 }, err => console.error(err));
