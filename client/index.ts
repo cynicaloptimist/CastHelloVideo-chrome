@@ -1,6 +1,5 @@
 import * as _ from "lodash";
 import * as $ from "jquery";
-import { resolve } from "url";
 
 declare var gapi;
 // The client ID is obtained from the {{ Google Cloud Console }}
@@ -125,23 +124,52 @@ async function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
   });
 }
 
-let videoIds = [];
+let videos: RedditPostData [] = [];
+
+interface RedditResponse {
+  data: {
+    children: {
+      data: RedditPostData
+    }[]
+  }
+}
+
+interface RedditPostData {
+  title: string;
+  url: string;
+  created_utc: number;
+}
+
+function getVideoIdFromUrl(urlString: string) {
+  const url = new URL(urlString);
+  if (url.searchParams.has("v")) {
+      return url.searchParams.get("v");
+  }
+  if (url.hostname == "youtu.be") {
+      return url.pathname.replace("/", "");
+  }
+
+  return undefined;
+}
 
 $(".button--get-videos").click(() => {
-  $.getJSON('/youtubehaiku/top', (ids: string[]) => {
-    videoIds = ids;
+  $.getJSON('https://www.reddit.com/r/youtubehaiku/top.json?t=week&limit=50', (response: RedditResponse) => {
+    videos = response.data.children.map(c => c.data);
     $(".button--make-playlist").prop("disabled", false);
-    $(".video-list").text(videoIds.join("\n"));
+    $(".video-list").html(videos.map(video => `<p>${video.title}</p>`).join("\n"));
   });
 });
 
 $(".button--make-playlist").click(() => {
-  if (videoIds.length == 0) {
+  if (videos.length == 0) {
     return;
   }
   createPlaylist(async playlistId => {
-    for (const id of videoIds) {
-      await addToPlaylist(playlistId, id);
+    for (const video of videos) {
+      const id = getVideoIdFromUrl(video.url);
+      if (id) {
+        await addToPlaylist(playlistId, id);  
+      }
     }
   });
 });
