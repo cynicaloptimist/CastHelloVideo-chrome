@@ -15,18 +15,20 @@ async function getHaikuUrls() {
     return await r.getSubreddit('youtubehaiku').getTop({time: "week"}).map(submission => submission.url);
 }
 
-async function getHaikuVideoIds() {
-    const urls = await getHaikuUrls();
-    return urls.map(url => {
-        const params = querystring.parse(url);
-        if (!(params && params.v)) {
-            return undefined;
+function getHaikuVideoIds(urls: string []) {
+    const ids = urls.map(urlString => {
+        const url = new URL(urlString);
+        if (url.searchParams.has("v")) {
+            return url.searchParams.get("v");
         }
-        if ((<string []>params.v).pop != undefined) {
-            return (<string []>params.v).pop();
+        if (url.hostname == "youtu.be") {
+            return url.pathname.replace("/", "");
         }
-        return <string>(params.v);
-    }).filter(id => id !== undefined);
+
+        return undefined;
+    });
+        
+    return ids.filter(id => id !== undefined);
 }
 
 let entries = [];
@@ -36,10 +38,11 @@ const app = express();
 app.use(express.static('public'));
 
 app.get('/youtubehaiku/top', async function (req, res) {
-    res.send(await entries);
+    res.send(entries);
 });
 
 app.listen(8080, async () => {
-    entries = await getHaikuVideoIds();
+    const urls = await getHaikuUrls();
+    entries = getHaikuVideoIds(urls);
     console.log('started');
 });
