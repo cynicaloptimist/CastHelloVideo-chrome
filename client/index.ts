@@ -153,7 +153,7 @@ function getVideoIdFromUrl(urlString: string) {
 }
 
 $(".button--get-videos").click(() => {
-  $.getJSON('https://www.reddit.com/r/youtubehaiku/top.json?t=week&limit=50', (response: RedditResponse) => {
+  $.getJSON('https://www.reddit.com/r/youtubehaiku/top.json?t=week&limit=5', (response: RedditResponse) => {
     videos = response.data.children.map(c => c.data);
     $(".button--make-playlist").prop("disabled", false);
     $(".video-list").html(videos.map(video => `<p>${video.title}</p>`).join("\n"));
@@ -168,8 +168,14 @@ $(".button--make-playlist").click(() => {
     for (const video of videos) {
       const id = getVideoIdFromUrl(video.url);
       if (id) {
-        await addToPlaylist(playlistId, id);  
+        try {
+          await addToPlaylist(playlistId, id);
+        }
+        catch (e) {
+          console.warn(`Problem adding video ${video.title}: ${JSON.stringify(e)}`);
+        }
       }
     }
+    $(".playlist-link").html(`<a href="https://www.youtube.com/playlist?list=${playlistId}">Created Playlist</a>`);
   });
 });
