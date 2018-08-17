@@ -14,7 +14,10 @@ var OAUTH2_SCOPES = [
 // Upon loading, the Google APIs JS client automatically invokes this callback.
 window["googleApiClientReady"] = function () {
   gapi.auth.init(function () {
-    window.setTimeout(checkAuth, 1);
+    window.setTimeout(async () => {
+      const auth = await checkAuth();
+      handleAuthResult(auth);
+    });
   });
 }
 
@@ -23,12 +26,20 @@ window["googleApiClientReady"] = function () {
 // the client specified as the OAUTH2_CLIENT_ID, then the authorization
 // succeeds with no user intervention. Otherwise, it fails and the
 // user interface that prompts for authorization needs to display.
-function checkAuth() {
-  gapi.auth.authorize({
-    client_id: OAUTH2_CLIENT_ID,
-    scope: OAUTH2_SCOPES,
-    immediate: true
-  }, handleAuthResult);
+async function checkAuth() {
+  return new Promise((resolve, reject) => {
+    gapi.auth.authorize({
+      client_id: OAUTH2_CLIENT_ID,
+      scope: OAUTH2_SCOPES,
+      immediate: true
+    }, (authResult) => {
+      if (authResult.error) {
+        reject(authResult.error);
+      } else {
+        resolve(authResult);
+      }
+    });
+  })
 }
 
 // Handle the result of a gapi.auth.authorize() call.
