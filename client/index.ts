@@ -125,15 +125,23 @@ async function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
   });
 }
 
+let videoIds = [];
 
-$.getJSON('/youtubehaiku/top', (ids: string[]) => {
-  $('.play')
-    .prop("disabled", false)
-    .click(() => {
-      createPlaylist(async playlistId => {
-        for (const id of ids) {
-          await addToPlaylist(playlistId, id);
-        }
-      });
-    });
-}, err => console.error(err));
+$(".button--get-videos").click(() => {
+  $.getJSON('/youtubehaiku/top', (ids: string[]) => {
+    videoIds = ids;
+    $(".button--make-playlist").prop("disabled", false);
+    $(".video-list").text(videoIds.join("\n"));
+  });
+});
+
+$(".button--make-playlist").click(() => {
+  if (videoIds.length == 0) {
+    return;
+  }
+  createPlaylist(async playlistId => {
+    for (const id of videoIds) {
+      await addToPlaylist(playlistId, id);
+    }
+  });
+});
