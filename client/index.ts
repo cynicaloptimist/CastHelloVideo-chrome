@@ -1,6 +1,8 @@
 import * as _ from "lodash";
 import * as $ from "jquery";
 
+const redditPath = "r/youtubehaiku/top.json?t=week&limit=5";
+
 declare var gapi;
 // The client ID is obtained from the {{ Google Cloud Console }}
 // at {{ https://cloud.google.com/console }}.
@@ -183,7 +185,8 @@ function getVideoFromUrl(urlString: string): Video {
 }
 
 $(".button--get-videos").click(() => {
-  $.getJSON('https://www.reddit.com/r/youtubehaiku/top.json?t=week&limit=5', (response: RedditResponse) => {
+  
+  $.getJSON('https://www.reddit.com/' + redditPath, (response: RedditResponse) => {
     posts = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
     $(".button--make-playlist").prop("disabled", false);
     $(".video-list").html(posts.map(video => `<p>${video.title} [${video.url}]</p>`).join("\n"));
