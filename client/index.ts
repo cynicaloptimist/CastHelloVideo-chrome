@@ -206,6 +206,6 @@ $(".button--make-playlist").click(() => {
         }
       }
     }
-    $(".playlist-link").html(`<a href="https://www.youtube.com/playlist?list=${playlistId}">Created Playlist</a>`);
+    $(".playlist-link").html(`<a href="https://www.youtube.com/playlist?list=${playlistId}" target="_blank">Created Playlist</a>`);
   });
 });
