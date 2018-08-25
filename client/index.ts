@@ -135,55 +135,71 @@ async function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
   });
 }
 
-let videos: RedditPostData[] = [];
+let posts: RedditPost[] = [];
 
 interface RedditResponse {
   data: {
     children: {
-      data: RedditPostData
+      data: RedditPost
     }[]
   }
 }
 
-interface RedditPostData {
+interface RedditPost {
   title: string;
   url: string;
   created_utc: number;
 }
 
-function getVideoDataFromUrl(urlString: string): ({ videoId: string, startTime?: string } | undefined) {
+interface Video {
+  id: string;
+  startTime?: string;
+  endTime?: string;
+}
+
+function getVideoFromUrl(urlString: string): Video {
   const url = new URL(urlString);
+
+  const video = {
+    id: null,
+    startTime: null,
+    endTime: null
+  };
+
   if (url.searchParams.has("v")) {
-    return {
-      videoId: url.searchParams.get("v"),
-      startTime: url.searchParams.get("t")
-    };
+    video.id = url.searchParams.get("v");
+  } else if (url.hostname == "youtu.be") {
+    video.id = url.pathname.replace("/", "");
   }
-  if (url.hostname == "youtu.be") {
-    return {
-      videoId: url.pathname.replace("/", "")
-    };
+
+  if (url.searchParams.has("t")) {
+    video.startTime = url.searchParams.get("t");
   }
+  if (url.searchParams.has("start")) {
+    video.startTime = url.searchParams.get("start");
+  }
+
+  return video;
 }
 
 $(".button--get-videos").click(() => {
   $.getJSON('https://www.reddit.com/r/youtubehaiku/top.json?t=week&limit=5', (response: RedditResponse) => {
-    videos = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
+    posts = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
     $(".button--make-playlist").prop("disabled", false);
-    $(".video-list").html(videos.map(video => `<p>${video.title} [${video.url}]</p>`).join("\n"));
+    $(".video-list").html(posts.map(video => `<p>${video.title} [${video.url}]</p>`).join("\n"));
   });
 });
 
 $(".button--make-playlist").click(() => {
-  if (videos.length == 0) {
+  if (posts.length == 0) {
     return;
   }
   createPlaylist(async playlistId => {
-    for (const video of videos) {
-      const data = getVideoDataFromUrl(video.url);
-      if (data) {
+    for (const post of posts) {
+      const video = getVideoFromUrl(post.url);
+      if (video) {
         try {
-          await addToPlaylist(playlistId, data.videoId, data.startTime);
+          await addToPlaylist(playlistId, video.id, video.startTime);
         }
         catch (e) {
           console.warn(`Problem adding video ${JSON.stringify(video)}: ${JSON.stringify(e)}`);
