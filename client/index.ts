@@ -135,7 +135,7 @@ async function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
   });
 }
 
-let videos: RedditPostData [] = [];
+let videos: RedditPostData[] = [];
 
 interface RedditResponse {
   data: {
@@ -154,10 +154,10 @@ interface RedditPostData {
 function getVideoIdFromUrl(urlString: string) {
   const url = new URL(urlString);
   if (url.searchParams.has("v")) {
-      return url.searchParams.get("v");
+    return url.searchParams.get("v");
   }
   if (url.hostname == "youtu.be") {
-      return url.pathname.replace("/", "");
+    return url.pathname.replace("/", "");
   }
 
   return undefined;
@@ -165,7 +165,7 @@ function getVideoIdFromUrl(urlString: string) {
 
 $(".button--get-videos").click(() => {
   $.getJSON('https://www.reddit.com/r/youtubehaiku/top.json?t=week&limit=5', (response: RedditResponse) => {
-    videos = response.data.children.map(c => c.data);
+    videos = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
     $(".button--make-playlist").prop("disabled", false);
     $(".video-list").html(videos.map(video => `<p>${video.title}</p>`).join("\n"));
   });
