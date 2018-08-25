@@ -83,8 +83,8 @@ function createPlaylist(callback: (playlistId: string) => void) {
     part: 'snippet,status',
     resource: {
       snippet: {
-        title: 'Test Playlist',
-        description: 'A private playlist created with the YouTube API'
+        title: 'Videos posted to Reddit: ' + redditPath,
+        description: 'Created with RedditSlurp'
       },
       status: {
         privacyStatus: 'private'
