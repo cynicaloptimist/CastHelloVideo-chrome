@@ -4,5 +4,8 @@
         "target": "es2017",
         "noImplicitAny": false,
         "sourceMap": true
-    }
+    },
+    "files": [
+        "./client/index.ts"    
+    ]
 }
