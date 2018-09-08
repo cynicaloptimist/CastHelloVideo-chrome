@@ -57,14 +57,17 @@ function getVideoFromUrl(urlString: string): Video {
 }
 
 $(".button--get-videos").click(() => {
-  
+
   $.getJSON('https://www.reddit.com/' + redditPath, (response: RedditResponse) => {
     posts = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
     $(".button--make-playlist").prop("disabled", false);
     const list = $(".video-list");
     for (const index in posts) {
       const post = posts[index];
-      const postElement = $(`<p id="${index}">${post.title} [${post.url}]</p>`);
+      const postElement = $(`<p id="imported-reddit-video--${index}">${post.title} [${post.url}] <span>[x]</span></p>`);
+      postElement.find("span").click(() => {
+        postElement.detach();
+      });
       list.append(postElement);
     }
   });
