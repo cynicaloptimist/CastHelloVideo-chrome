@@ -1,3 +1,5 @@
+import * as $ from "jquery";
+
 declare var gapi;
 // The client ID is obtained from the {{ Google Cloud Console }}
 // at {{ https://cloud.google.com/console }}.

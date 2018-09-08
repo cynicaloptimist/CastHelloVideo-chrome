@@ -1,3 +1,5 @@
+import * as $ from "jquery";
+
 declare var gapi;
 
 export async function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
