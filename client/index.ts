@@ -62,11 +62,12 @@ $(".button--get-videos").click(() => {
     posts = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
     $(".button--make-playlist").prop("disabled", false);
     const list = $(".video-list");
-    for (const index in posts) {
+    for (let index = 0; index < posts.length; index++) {
       const post = posts[index];
       const postElement = $(`<p id="imported-reddit-video--${index}">${post.title} [${post.url}] <span>[x]</span></p>`);
       postElement.find("span").click(() => {
         postElement.detach();
+        posts.splice(index, 1);
       });
       list.append(postElement);
     }
