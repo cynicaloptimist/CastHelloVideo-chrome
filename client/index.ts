@@ -23,7 +23,7 @@ function handleAPILoaded() {
   $("#playlist-button").prop("disabled", false);
 }
 
-let posts: RedditPost[] = [];
+let posts: { data: RedditPost; element: JQuery }[] = [];
 
 interface Video {
   id: string;
@@ -59,17 +59,22 @@ function getVideoFromUrl(urlString: string): Video {
 $(".button--get-videos").click(() => {
 
   $.getJSON('https://www.reddit.com/' + redditPath, (response: RedditResponse) => {
-    posts = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
+    posts = response.data.children.sort((a, b) => a.data.created_utc - b.data.created_utc)
+      .map((c, i) => ({
+        data: c.data,
+        element: $(`<p id="imported-reddit-video--${i}">${c.data.title} [${c.data.url}] <span>[x]</span></p>`)
+      }));
+    
     $(".button--make-playlist").prop("disabled", false);
+    
     const list = $(".video-list");
     for (let index = 0; index < posts.length; index++) {
       const post = posts[index];
-      const postElement = $(`<p id="imported-reddit-video--${index}">${post.title} [${post.url}] <span>[x]</span></p>`);
-      postElement.find("span").click(() => {
-        postElement.detach();
+      post.element.find("span").click(() => {
+        post.element.detach();
         posts.splice(index, 1);
       });
-      list.append(postElement);
+      list.append(post.element);
     }
   });
 });
@@ -80,7 +85,7 @@ $(".button--make-playlist").click(() => {
   }
   createPlaylist(async playlistId => {
     for (const post of posts) {
-      const video = getVideoFromUrl(post.url);
+      const video = getVideoFromUrl(post.data.url);
       if (video) {
         try {
           await addToPlaylist(playlistId, video.id, video.startTime);
