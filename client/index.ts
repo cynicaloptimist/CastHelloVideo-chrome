@@ -3,6 +3,7 @@ import * as $ from "jquery";
 
 import { checkAuth, handleAuthResult } from "./google-auth";
 import { createPlaylist, addToPlaylist } from "./youtube";
+import { RedditPost, RedditResponse } from "./reddit";
 
 const redditPath = "r/youtubehaiku/top.json?t=week&limit=5";
 
@@ -23,20 +24,6 @@ function handleAPILoaded() {
 }
 
 let posts: RedditPost[] = [];
-
-interface RedditResponse {
-  data: {
-    children: {
-      data: RedditPost
-    }[]
-  }
-}
-
-interface RedditPost {
-  title: string;
-  url: string;
-  created_utc: number;
-}
 
 interface Video {
   id: string;
