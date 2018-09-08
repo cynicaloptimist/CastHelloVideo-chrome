@@ -61,7 +61,12 @@ $(".button--get-videos").click(() => {
   $.getJSON('https://www.reddit.com/' + redditPath, (response: RedditResponse) => {
     posts = response.data.children.map(c => c.data).sort((a, b) => a.created_utc - b.created_utc);
     $(".button--make-playlist").prop("disabled", false);
-    $(".video-list").html(posts.map(video => `<p>${video.title} [${video.url}]</p>`).join("\n"));
+    const list = $(".video-list");
+    for (const index in posts) {
+      const post = posts[index];
+      const postElement = $(`<p id="${index}">${post.title} [${post.url}]</p>`);
+      list.append(postElement);
+    }
   });
 });
 
