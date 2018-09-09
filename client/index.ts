@@ -76,7 +76,7 @@ $(".button--get-videos").click(() => {
     const list = $(".video-list");
     for (let index = 0; index < posts.length; index++) {
       const post = posts[index];
-      post.element.find("span").click(() => AnimateRemovePost(post, index));
+      post.element.find("span").click(() => AnimateRemovePost(post, index, "bounceOutLeft"));
 
       AnimateAddPost(post, list);
     }
@@ -95,9 +95,9 @@ async function AnimateAddPost(post, list) {
   })
 }
 
-async function AnimateRemovePost(post, index) {
+async function AnimateRemovePost(post: PostAndElement, index: number, animation: string) {
   return new Promise<JQuery>(resolve => {
-    AnimateElement(post.element, "bounceOutLeft");
+    AnimateElement(post.element, animation);
     setTimeout(() => {
       post.element.css("visibility", "hidden");
       post.element.slideUp(100, () => post.element.remove());
