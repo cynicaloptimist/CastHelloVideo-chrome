@@ -65,14 +65,18 @@ $(".button--get-videos").click(() => {
         data: c.data,
         element: $(`<p id="imported-reddit-video--${i}">${c.data.title} [${c.data.url}] <span>[x]</span></p>`)
       }));
-    
+
     $(".button--make-playlist").prop("disabled", false);
-    
+
     const list = $(".video-list");
     for (let index = 0; index < posts.length; index++) {
       const post = posts[index];
       post.element.find("span").click(() => {
-        AnimateElement(post.element, "bounceOutLeft");
+        AnimateElement(post.element, "bounceOutLeft",
+          () => {
+            post.element.css("visibility", "hidden");
+            post.element.slideUp();
+          });
         posts.splice(index, 1);
       });
       list.append(post.element);
