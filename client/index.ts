@@ -74,10 +74,8 @@ $(".button--get-videos").click(() => {
     $(".button--make-playlist").prop("disabled", false);
 
     const list = $(".video-list");
-    for (let index = 0; index < posts.length; index++) {
-      const post = posts[index];
-      post.element.find("span").click(() => AnimateRemovePost(post, index, "bounceOutLeft"));
-
+    for (const post of posts) {
+      post.element.find("span").click(() => AnimateRemovePost(post, "bounceOutLeft"));
       AnimateAddPost(post, list);
     }
   });
@@ -95,13 +93,13 @@ async function AnimateAddPost(post, list) {
   })
 }
 
-async function AnimateRemovePost(post: PostAndElement, index: number, animation: string) {
+async function AnimateRemovePost(post: PostAndElement, animation: string) {
   return new Promise<JQuery>(resolve => {
     AnimateElement(post.element, animation);
     setTimeout(() => {
       post.element.css("visibility", "hidden");
       post.element.slideUp(100, () => post.element.remove());
-      posts.splice(index, 1);
+      _.remove(posts, post);
       resolve(post.element);
     }, 300);
   });
