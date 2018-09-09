@@ -37,6 +37,13 @@ interface Video {
   endTime?: string;
 }
 
+//From https://stackoverflow.com/a/27728417/514072
+const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
+function getIdFromUrl(urlString: string) {
+  const r = urlString.match(youtubeRegex);
+  return r[1] || null;
+}
+
 function getVideoFromUrl(urlString: string): Video {
   const url = new URL(urlString);
 
@@ -46,12 +53,7 @@ function getVideoFromUrl(urlString: string): Video {
     endTime: null
   };
 
-  if (url.searchParams.has("v")) {
-    video.id = url.searchParams.get("v");
-  } else if (url.hostname == "youtu.be") {
-    video.id = url.pathname.replace("/", "");
-  }
-
+  video.id = getIdFromUrl(url.href);
   if (url.searchParams.has("t")) {
     video.startTime = url.searchParams.get("t");
   }
