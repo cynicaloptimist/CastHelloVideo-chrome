@@ -117,10 +117,11 @@ $(".button--make-playlist").click(() => {
       if (video) {
         try {
           await addToPlaylist(playlistId, video.id, video.startTime);
-          AnimateRemovePost(post, "bounceOutRight")
+          AnimateRemovePost(post, "bounceOutRight");
         }
         catch (e) {
           console.warn(`Problem adding video ${JSON.stringify(video)}: ${JSON.stringify(e)}`);
+          AnimateElement(post.element, "shake");
         }
       }
     }
