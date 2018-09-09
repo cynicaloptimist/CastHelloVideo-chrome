@@ -4,6 +4,7 @@ import * as $ from "jquery";
 import { checkAuth, handleAuthResult } from "./google-auth";
 import { createPlaylist, addToPlaylist } from "./youtube";
 import { RedditPost, RedditResponse } from "./reddit";
+import { AnimateElement } from "./animate";
 
 const redditPath = "r/youtubehaiku/top.json?t=week&limit=5";
 
@@ -71,7 +72,7 @@ $(".button--get-videos").click(() => {
     for (let index = 0; index < posts.length; index++) {
       const post = posts[index];
       post.element.find("span").click(() => {
-        post.element.detach();
+        AnimateElement(post.element, "bounceOutLeft");
         posts.splice(index, 1);
       });
       list.append(post.element);
