@@ -15,10 +15,11 @@ const animationEndEventName = (function (el) {
     }
 })(document.createElement('div'));
 
-export function AnimateElement(element: JQuery, animationName: string, callback?: () => void) {
-    element.addClass('animated ' + animationName).one(animationEndEventName, function () {
-        $(element).removeClass('animated ' + animationName);
-
-        if (typeof callback === 'function') callback();
+export async function AnimateElement(element: JQuery, animationName: string): Promise<JQuery> {
+    return new Promise<JQuery>(resolve => {
+        element.addClass('animated ' + animationName).one(animationEndEventName, function () {
+            $(element).removeClass('animated ' + animationName);
+            resolve(element);
+        });
     });
 }

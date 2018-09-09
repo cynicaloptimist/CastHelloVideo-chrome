@@ -71,14 +71,13 @@ $(".button--get-videos").click(() => {
     const list = $(".video-list");
     for (let index = 0; index < posts.length; index++) {
       const post = posts[index];
-      post.element.find("span").click(() => {
-        AnimateElement(post.element, "bounceOutLeft",
-          () => {
-            post.element.css("visibility", "hidden");
-            post.element.slideUp();
-          });
+      post.element.find("span").click(async () => {
+        await AnimateElement(post.element, "bounceOutLeft");
+        post.element.css("visibility", "hidden");
+        post.element.slideUp();
         posts.splice(index, 1);
       });
+      
       list.append(post.element);
     }
   });
