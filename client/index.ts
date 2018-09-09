@@ -24,7 +24,12 @@ function handleAPILoaded() {
   $("#playlist-button").prop("disabled", false);
 }
 
-let posts: { data: RedditPost; element: JQuery }[] = [];
+interface PostAndElement {
+  data: RedditPost;
+  element: JQuery
+}
+
+let posts: PostAndElement[] = [];
 
 interface Video {
   id: string;
@@ -71,17 +76,29 @@ $(".button--get-videos").click(() => {
     const list = $(".video-list");
     for (let index = 0; index < posts.length; index++) {
       const post = posts[index];
-      post.element.find("span").click(async () => {
-        await AnimateElement(post.element, "bounceOutLeft");
-        post.element.css("visibility", "hidden");
-        post.element.slideUp();
-        posts.splice(index, 1);
-      });
-      
+      post.element.find("span").click(() => AnimateRemovePost(post, index));
+
+      post.element.css("visibility", "hidden");
       list.append(post.element);
+      post.element.slideDown(100, () => {
+        post.element.css("visibility", "visible");
+        AnimateElement(post.element, "bounceInLeft")
+      });
     }
   });
 });
+
+async function AnimateRemovePost(post, index) {
+  return new Promise<JQuery>(resolve => {
+    AnimateElement(post.element, "bounceOutLeft");
+    setTimeout(() => {
+      post.element.css("visibility", "hidden");
+      post.element.slideUp(100, () => post.element.remove());
+      posts.splice(index, 1);
+      resolve(post.element);
+    }, 300);
+  });
+}
 
 $(".button--make-playlist").click(() => {
   if (posts.length == 0) {
