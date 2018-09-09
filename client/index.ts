@@ -84,12 +84,12 @@ $(".button--get-videos").click(() => {
 async function AnimateAddPost(post, list) {
   return new Promise<JQuery>(resolve => {
     post.element.css("visibility", "hidden");
-      list.append(post.element);
-      post.element.slideDown(100, async () => {
-        post.element.css("visibility", "visible");
-        await AnimateElement(post.element, "bounceInLeft");
-        resolve();
-      });
+    list.append(post.element);
+    post.element.slideDown(100, async () => {
+      post.element.css("visibility", "visible");
+      await AnimateElement(post.element, "bounceInLeft");
+      resolve();
+    });
   })
 }
 
@@ -115,6 +115,7 @@ $(".button--make-playlist").click(() => {
       if (video) {
         try {
           await addToPlaylist(playlistId, video.id, video.startTime);
+          AnimateRemovePost(post, "bounceOutRight")
         }
         catch (e) {
           console.warn(`Problem adding video ${JSON.stringify(video)}: ${JSON.stringify(e)}`);
