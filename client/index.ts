@@ -78,15 +78,22 @@ $(".button--get-videos").click(() => {
       const post = posts[index];
       post.element.find("span").click(() => AnimateRemovePost(post, index));
 
-      post.element.css("visibility", "hidden");
-      list.append(post.element);
-      post.element.slideDown(100, () => {
-        post.element.css("visibility", "visible");
-        AnimateElement(post.element, "bounceInLeft")
-      });
+      AnimateAddPost(post, list);
     }
   });
 });
+
+async function AnimateAddPost(post, list) {
+  return new Promise<JQuery>(resolve => {
+    post.element.css("visibility", "hidden");
+      list.append(post.element);
+      post.element.slideDown(100, async () => {
+        post.element.css("visibility", "visible");
+        await AnimateElement(post.element, "bounceInLeft");
+        resolve();
+      });
+  })
+}
 
 async function AnimateRemovePost(post, index) {
   return new Promise<JQuery>(resolve => {
