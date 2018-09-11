@@ -125,6 +125,6 @@ $(".button--make-playlist").click(() => {
         }
       }
     }
-    $(".playlist-link").show().click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
+    $(".button--view-playlist").prop("disabled", false).click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
   }, redditPath);
 });
