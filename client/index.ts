@@ -79,6 +79,7 @@ $(".button--get-videos").click(() => {
         </li>`)
       }));
 
+    $(".button--get-videos").prop("disabled", true);
     $(".button--make-playlist").prop("disabled", false);
 
     const list = $(".video-list");
@@ -133,5 +134,6 @@ $(".button--make-playlist").click(() => {
       }
     }
     $(".button--view-playlist").prop("disabled", false).click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
+    $(".button--make-playlist").prop("disabled", true);
   }, redditPath);
 });
