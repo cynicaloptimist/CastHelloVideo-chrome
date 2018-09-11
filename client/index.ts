@@ -72,7 +72,7 @@ $(".button--get-videos").click(() => {
         data: c.data,
         element: $(`
         <li class="list-group-item" id="imported-reddit-video--${i}">
-          ${c.data.title} [${c.data.url}] 
+          <a href="${c.data.url}" target="_blank">${c.data.title}</a>
           <button type="button" class="close" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -128,6 +128,7 @@ $(".button--make-playlist").click(() => {
         catch (e) {
           console.warn(`Problem adding video ${JSON.stringify(video)}: ${JSON.stringify(e)}`);
           AnimateElement(post.element, "shake");
+          post.element.addClass("list-group-item-warning");
         }
       }
     }
