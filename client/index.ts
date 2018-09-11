@@ -70,14 +70,16 @@ $(".button--get-videos").click(() => {
     posts = response.data.children.sort((a, b) => a.data.created_utc - b.data.created_utc)
       .map((c, i) => ({
         data: c.data,
-        element: $(`<li class="list-group-item" id="imported-reddit-video--${i}">${c.data.title} [${c.data.url}] <span>[x]</span></li>`)
+        element: $(`<li class="list-group-item" id="imported-reddit-video--${i}">${c.data.title} [${c.data.url}] <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button></li>`)
       }));
 
     $(".button--make-playlist").prop("disabled", false);
 
     const list = $(".video-list");
     for (const post of posts) {
-      post.element.find("span").click(() => AnimateRemovePost(post, "bounceOutLeft"));
+      post.element.find("button.close").click(() => AnimateRemovePost(post, "bounceOutLeft"));
       AnimateAddPost(post, list);
     }
   });
