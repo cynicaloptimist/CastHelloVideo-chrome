@@ -112,7 +112,7 @@ $(".button--make-playlist").click(() => {
     return;
   }
   createPlaylist(async playlistId => {
-    for (const post of posts) {
+    for (const post of posts.slice()) {
       const video = getVideoFromUrl(post.data.url);
       if (video) {
         try {
