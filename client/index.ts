@@ -21,7 +21,7 @@ window["googleApiClientReady"] = function () {
 }
 
 function handleAPILoaded() {
-  $("#playlist-button").prop("disabled", false);
+  $(".button--get-videos").prop("disabled", false);
 }
 
 interface PostAndElement {
