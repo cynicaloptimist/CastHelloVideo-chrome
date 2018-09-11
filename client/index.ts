@@ -70,9 +70,13 @@ $(".button--get-videos").click(() => {
     posts = response.data.children.sort((a, b) => a.data.created_utc - b.data.created_utc)
       .map((c, i) => ({
         data: c.data,
-        element: $(`<li class="list-group-item" id="imported-reddit-video--${i}">${c.data.title} [${c.data.url}] <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button></li>`)
+        element: $(`
+        <li class="list-group-item" id="imported-reddit-video--${i}">
+          ${c.data.title} [${c.data.url}] 
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </li>`)
       }));
 
     $(".button--make-playlist").prop("disabled", false);
