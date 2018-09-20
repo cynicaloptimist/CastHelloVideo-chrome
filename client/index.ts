@@ -6,7 +6,11 @@ import { createPlaylist, addToPlaylist } from "./youtube";
 import { RedditPost, RedditResponse } from "./reddit";
 import { AnimateElement } from "./animate";
 
-const redditPath = "r/youtubehaiku/top.json?t=week&limit=5";
+function getRedditPath(subredditName: string, sort: string, time: string, limit: number) {
+  return `r/${subredditName}/${sort}.json?t=${time}&limit=${limit}`;
+}
+
+const redditPath = getRedditPath("youtubehaiku", "top", "week", 50);
 
 declare var gapi;
 
