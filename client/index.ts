@@ -10,8 +10,6 @@ function getRedditPath(subredditName: string, sort: string, time: string, limit:
   return `r/${subredditName}/${sort}.json?t=${time}&limit=${limit}`;
 }
 
-const redditPath = getRedditPath("youtubehaiku", "top", "week", 50);
-
 declare var gapi;
 
 // Upon loading, the Google APIs JS client automatically invokes this callback.
@@ -68,7 +66,10 @@ function getVideoFromUrl(urlString: string): Video {
   return video;
 }
 
+let redditPath = "";
+
 $(".button--get-videos").click(() => {
+  redditPath = getRedditPath("youtubehaiku", "top", "week", 50);
 
   $.getJSON('https://www.reddit.com/' + redditPath, (response: RedditResponse) => {
     posts = response.data.children.sort((a, b) => a.data.created_utc - b.data.created_utc)
