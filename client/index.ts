@@ -118,26 +118,26 @@ async function AnimateRemovePost(post: PostAndElement, animation: string) {
   });
 }
 
-$(".button--make-playlist").click(() => {
+$(".button--make-playlist").click(async () => {
   if (posts.length == 0) {
     return;
   }
-  createPlaylist(async playlistId => {
-    for (const post of posts.slice()) {
-      const video = getVideoFromUrl(post.data.url);
-      if (video) {
-        try {
-          await addToPlaylist(playlistId, video.id, video.startTime);
-          AnimateRemovePost(post, "bounceOutRight");
-        }
-        catch (e) {
-          console.warn(`Problem adding video ${JSON.stringify(video)}: ${JSON.stringify(e)}`);
-          AnimateElement(post.element, "shake");
-          post.element.addClass("list-group-item-warning");
-        }
+
+  const playlistId = await createPlaylist(redditPath);
+  for (const post of posts.slice()) {
+    const video = getVideoFromUrl(post.data.url);
+    if (video) {
+      try {
+        await addToPlaylist(playlistId, video.id, video.startTime);
+        AnimateRemovePost(post, "bounceOutRight");
+      }
+      catch (e) {
+        console.warn(`Problem adding video ${JSON.stringify(video)}: ${JSON.stringify(e)}`);
+        AnimateElement(post.element, "shake");
+        post.element.addClass("list-group-item-warning");
       }
     }
-    $(".button--view-playlist").prop("disabled", false).click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
-    $(".button--make-playlist").prop("disabled", true);
-  }, redditPath);
+  }
+  $(".button--view-playlist").prop("disabled", false).click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
+  $(".button--make-playlist").prop("disabled", true);
 });

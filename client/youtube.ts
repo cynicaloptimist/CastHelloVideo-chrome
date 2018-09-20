@@ -35,25 +35,28 @@ export async function addToPlaylist(playlistId, videoId, startPos?, endPos?) {
   });
 }
 
-export function createPlaylist(callback: (playlistId: string) => void, redditPath: string) {
-  var request = gapi.client.youtube.playlists.insert({
-    part: 'snippet,status',
-    resource: {
-      snippet: {
-        title: 'Videos posted to Reddit: ' + redditPath,
-        description: 'Created with RedditSlurp'
-      },
-      status: {
-        privacyStatus: 'private'
+export async function createPlaylist(redditPath: string) {
+  return new Promise(resolve => {
+    var request = gapi.client.youtube.playlists.insert({
+      part: 'snippet,status',
+      resource: {
+        snippet: {
+          title: 'Videos posted to Reddit: ' + redditPath,
+          description: 'Created with RedditSlurp'
+        },
+        status: {
+          privacyStatus: 'private'
+        }
       }
-    }
-  });
-  request.execute(function (response) {
-    var result = response.result;
-    if (result) {
-      callback(result.id);
-    } else {
-      $('#status').html('Could not create playlist');
-    }
-  });
+    });
+    request.execute(function (response) {
+      var result = response.result;
+      if (result) {
+        resolve(result.id);
+      } else {
+        $('#status').html('Could not create playlist');
+        throw (response);
+      }
+    });
+  })
 }
