@@ -4,6 +4,7 @@
   "description": "Cast and queue multiple videos from any subreddit",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "test",
     "build": "tsc && webpack"
   },
