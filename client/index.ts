@@ -43,7 +43,7 @@ interface Video {
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 function getIdFromUrl(urlString: string) {
   const r = urlString.match(youtubeRegex);
-  return r[1] || null;
+  return r && r[1] || null;
 }
 
 function getVideoFromUrl(urlString: string): Video {
@@ -69,7 +69,8 @@ function getVideoFromUrl(urlString: string): Video {
 let redditPath = "";
 
 $(".button--get-videos").click(() => {
-  redditPath = getRedditPath("youtubehaiku", "top", "week", 50);
+  const { subredditName, postCount } = getConfigurationOrDefaults();
+  redditPath = getRedditPath(subredditName, "top", "week", postCount);
 
   $.getJSON('https://www.reddit.com/' + redditPath, (response: RedditResponse) => {
     posts = response.data.children.sort((a, b) => a.data.created_utc - b.data.created_utc)
@@ -94,6 +95,14 @@ $(".button--get-videos").click(() => {
     }
   });
 });
+
+function getConfigurationOrDefaults() {
+  const subredditName = $(".configuration--subreddit").val() || "youtubehaiku";
+  const parsedPostCount = parseInt($(".configuration--post-count").val());
+  const postCount = parsedPostCount > 0 ? parsedPostCount : 5;
+
+  return { subredditName, postCount };
+}
 
 async function AnimateAddPost(post, list) {
   return new Promise<JQuery>(resolve => {

@@ -11,6 +11,26 @@
   <div class="container">
     <div class="row">
       <div class="col">
+        <form>
+          <div class="row">
+            <div class="col input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Subreddit</span>
+              </div>
+              <input type="text" class="form-control configuration--subreddit" value="youtubehaiku">
+            </div>
+            <div class="col input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Post count</span>
+              </div>
+              <input type="number" class="form-control configuration--post-count" value="50">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
         <button type="button" class="btn btn-block btn-primary button--youtube-login">Log in with Youtube</button>
         <button type="button" class="btn btn-block btn-primary button--get-videos" disabled>Get Video URLs</button>
         <ul class="list-group video-list" style="margin: .5rem;"></ul>
