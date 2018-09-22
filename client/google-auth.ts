@@ -16,18 +16,12 @@ const OAUTH2_SCOPES = [
 // succeeds with no user intervention. Otherwise, it fails and the
 // user interface that prompts for authorization needs to display.
 export async function checkAuth() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         gapi.auth.authorize({
             client_id: OAUTH2_CLIENT_ID,
             scope: OAUTH2_SCOPES,
             immediate: true
-        }, (authResult) => {
-            if (authResult.error) {
-                reject(authResult.error);
-            } else {
-                resolve(authResult);
-            }
-        });
+        }, resolve);
     })
 }
 
