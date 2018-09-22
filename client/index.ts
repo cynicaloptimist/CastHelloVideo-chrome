@@ -22,6 +22,11 @@ window["googleApiClientReady"] = function () {
   });
 }
 
+window["adsbygoogle"] = [{
+  google_ad_client: "ca-pub-4726215415553638",
+  enable_page_level_ads: true
+}];
+
 function handleAPILoaded() {
   $(".button--get-videos").prop("disabled", false);
 }
