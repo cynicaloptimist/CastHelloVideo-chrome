@@ -73,7 +73,7 @@ function getVideoFromUrl(urlString: string): Video {
 
 let redditPath = "";
 
-$(".button--get-videos").click(() => {
+function getVideos() {
   const { subredditName, postCount } = getConfigurationOrDefaults();
   redditPath = getRedditPath(subredditName, "top", "week", postCount);
 
@@ -99,7 +99,7 @@ $(".button--get-videos").click(() => {
       AnimateAddPost(post, list);
     }
   });
-});
+}
 
 function getConfigurationOrDefaults() {
   const subredditName = $(".configuration--subreddit").val() || "youtubehaiku";
@@ -133,7 +133,7 @@ async function AnimateRemovePost(post: PostAndElement, animation: string) {
   });
 }
 
-$(".button--make-playlist").click(async () => {
+async function makePlaylist() {
   if (posts.length == 0) {
     return;
   }
@@ -155,4 +155,7 @@ $(".button--make-playlist").click(async () => {
   }
   $(".button--view-playlist").prop("disabled", false).click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
   $(".button--make-playlist").prop("disabled", true);
-});
+}
+
+$(".button--get-videos").click(getVideos);
+$(".button--make-playlist").click(makePlaylist);
