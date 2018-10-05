@@ -155,6 +155,8 @@ async function makePlaylist() {
     }
   }
   $(".button--view-playlist").prop("disabled", false).click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
+  $(".row--view-playlist").css("display", "block");
+
   $(".button--make-playlist").prop("disabled", true);
 }
 
