@@ -32,13 +32,27 @@
     </div>
     <div class="row">
       <div class="col">
+        <button type="button" class="btn btn-block btn-primary button--get-videos">Get Video URLs</button>
+      </div>
+      <div class="col col--youtube-login">
         <button type="button" class="btn btn-block btn-primary button--youtube-login">Log in with Youtube</button>
-        <button type="button" class="btn btn-block btn-primary button--get-videos" disabled>Get Video URLs</button>
-        <ul class="list-group video-list" style="margin: .5rem;"></ul>
-        <button type="button" class="btn btn-block btn-primary button--make-playlist" disabled>Make Playlist</button>
-        <button type="button" class="btn btn-block btn-primary button--view-playlist" disabled>View Playlist</button>
+      </div>
+      <div class="col col--make-playlist" style="display:none;">
+        <button type="button" disabled class="btn btn-block btn-primary button--make-playlist">Make Playlist</button>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col">
+        <ul class="list-group video-list" style="margin: .5rem;"></ul>
+      </div>
+    </div>
+    <div class="row row--view-playlist" style="display:none;">
+      <div class="col">
+          <button type="button" class="btn btn-block btn-primary button--view-playlist">View Playlist</button>
+      </div>
+    </div>
+  </div>
   </div>
   <script src="bundle.js"></script>
   <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>

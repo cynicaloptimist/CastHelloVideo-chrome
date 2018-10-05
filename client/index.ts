@@ -28,7 +28,8 @@ window["adsbygoogle"] = [{
 }];
 
 function handleAPILoaded() {
-  $(".button--get-videos").prop("disabled", false);
+  $(".col--make-playlist").css("display", "block");
+  $(".col--youtube-login").css("display", "none");
 }
 
 interface PostAndElement {
