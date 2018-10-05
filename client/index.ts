@@ -28,7 +28,7 @@ window["adsbygoogle"] = [{
 }];
 
 function handleAPILoaded() {
-  $(".col--make-playlist").css("display", "block");
+  $(".col--make-playlist").css("display", "flex");
   $(".col--youtube-login").css("display", "none");
 }
 
@@ -155,7 +155,7 @@ async function makePlaylist() {
     }
   }
   $(".button--view-playlist").prop("disabled", false).click(() => window.open(`https://www.youtube.com/playlist?list=${playlistId}`, "_blank"));
-  $(".row--view-playlist").css("display", "block");
+  $(".row--view-playlist").css("display", "flex");
 
   $(".button--make-playlist").prop("disabled", true);
 }
