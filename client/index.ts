@@ -91,7 +91,6 @@ function getVideos() {
         </li>`)
       }));
 
-    $(".button--get-videos").prop("disabled", true);
     $(".button--make-playlist").prop("disabled", false);
 
     const list = $(".video-list");
@@ -99,7 +98,19 @@ function getVideos() {
       post.element.find("button.close").click(() => AnimateRemovePost(post, "bounceOutLeft"));
       AnimateAddPost(post, list);
     }
+
+    $(".col--get-videos").css("display", "none");
+    $(".col--reset").css("display", "flex");
   });
+}
+
+function reset() {
+  for (const post of posts) {
+    AnimateRemovePost(post, "bounceOutLeft");
+  }
+
+  $(".col--reset").css("display", "none");
+  $(".col--get-videos").css("display", "flex");
 }
 
 function getConfigurationOrDefaults() {
@@ -162,4 +173,5 @@ async function makePlaylist() {
 }
 
 $(".button--get-videos").click(getVideos);
+$(".button--reset").click(reset);
 $(".button--make-playlist").click(makePlaylist);
