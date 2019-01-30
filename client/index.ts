@@ -75,8 +75,8 @@ function getVideoFromUrl(urlString: string): Video {
 let redditPath = "";
 
 function getVideos() {
-  const { subredditName, postCount } = getConfigurationOrDefaults();
-  redditPath = getRedditPath(subredditName, "top", "week", postCount);
+  const { subredditName, time, postCount } = getConfigurationOrDefaults();
+  redditPath = getRedditPath(subredditName, "top", time, postCount);
 
   $.getJSON('https://www.reddit.com/' + redditPath, (response: RedditResponse) => {
     posts = response.data.children.sort((a, b) => a.data.created_utc - b.data.created_utc)
@@ -104,10 +104,11 @@ function getVideos() {
 
 function getConfigurationOrDefaults() {
   const subredditName = $(".configuration--subreddit").val() || "youtubehaiku";
+  const time = $(".configuration--time").val() || "week";
   const parsedPostCount = parseInt($(".configuration--post-count").val());
   const postCount = parsedPostCount > 0 ? parsedPostCount : 5;
 
-  return { subredditName, postCount };
+  return { subredditName, time, postCount };
 }
 
 async function AnimateAddPost(post, list) {
